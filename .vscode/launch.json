@@ -1,0 +1,111 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "MantisX Service - Default",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": ["--days-back", "1", "--output-dir", "output"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MANTISX_SERVICE_LOG_LEVEL": "20"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "MantisX Service - Debug Mode",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": ["--days-back", "1", "--output-dir", "output"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MANTISX_SERVICE_LOG_LEVEL": "10"
+      },
+      "justMyCode": false
+    },
+    {
+      "name": "MantisX Service - Step Through",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": ["--days-back", "1", "--output-dir", "output"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MANTISX_SERVICE_LOG_LEVEL": "10"
+      },
+      "justMyCode": false,
+      "stopOnEntry": true
+    },
+    {
+      "name": "MantisX Service - Date Range (Start Only)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": ["--start-date", "26/06/2025", "--output-dir", "output"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MANTISX_SERVICE_LOG_LEVEL": "20"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "MantisX Service - Date Range (Full)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": [
+        "--start-date",
+        "26/06/2025",
+        "--end-date",
+        "28/06/2025",
+        "--output-dir",
+        "output"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MANTISX_SERVICE_LOG_LEVEL": "20"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "Debug Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "-v", "-s"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "justMyCode": true
+    },
+    {
+      "name": "Debug Current Test File",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${relativeFile}", "-v", "-s"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "justMyCode": true
+    },
+    {
+      "name": "Debug Tests with Coverage",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "--cov=.", "--cov-report=term-missing", "-v", "-s"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "justMyCode": true
+    }
+  ]
+}
