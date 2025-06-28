@@ -49,3 +49,13 @@ Thumbs.db
 
 # Ignore extracted data
 output_data/*
+
+# Testing and Coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+*.cover
+.hypothesis/
