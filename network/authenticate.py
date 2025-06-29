@@ -22,8 +22,9 @@ def load_credentials() -> Credentials:
             break
 
     if not credentials_file:
-        logging.error("No credentials file found in the home directory. Expected one of: %s", possible_files)
-        exit(1)
+        error_msg = f"No credentials file found in the home directory. Expected one of: {possible_files}"
+        logging.error(error_msg)
+        raise FileNotFoundError(error_msg)
 
     try:
         with open(credentials_file, 'r') as f:
@@ -34,7 +35,7 @@ def load_credentials() -> Credentials:
             )
     except Exception as e:
         logging.error("Failed to parse the credentials file: %s", e)
-        exit(1)
+        raise ValueError(f"Failed to parse the credentials file: {e}") from e
 
 
 def login() -> UserData:
@@ -60,4 +61,4 @@ def login() -> UserData:
         )
     else:
         logging.error("Login failed with status code: %s", response.status_code)
-        exit(1)
+        raise RuntimeError(f"Login failed with status code: {response.status_code}")

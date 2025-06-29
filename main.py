@@ -100,12 +100,21 @@ def parse_arguments() -> argparse.Namespace:
 
 def main():
     args = parse_arguments()
-    user_data = login()
+    
+    try:
+        user_data = login()
+    except (FileNotFoundError, ValueError, RuntimeError) as e:
+        logging.error("Authentication failed: %s", e)
+        sys.exit(1)
 
-    if (args.start_date or args.end_date) and args.days_back == 1:
-        session_history = get_sessions_history(user_data, start_date=args.start_date, end_date=args.end_date)
-    else:
-        session_history = get_sessions_history(user_data, days_back=args.days_back)
+    try:
+        if (args.start_date or args.end_date) and args.days_back == 1:
+            session_history = get_sessions_history(user_data, start_date=args.start_date, end_date=args.end_date)
+        else:
+            session_history = get_sessions_history(user_data, days_back=args.days_back)
+    except RuntimeError as e:
+        logging.error("Failed to retrieve session history: %s", e)
+        sys.exit(1)
 
     # gather all session pks for a specific drill type
     filtered_pks = filter_sessions_by_drill(session_history.sessions, DrillType.HOLSTER_DRAW_ANALYSIS)

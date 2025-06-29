@@ -35,7 +35,7 @@ def prepare_csrf_headers() -> Dict[str, str]:
     csrf_token = _session.cookies.get("csrftoken")
     if not csrf_token:
         logging.error("Missing CSRF token in session cookies.")
-        exit(1)
+        raise RuntimeError("CSRF token not found in cookies. Cannot proceed.")
 
     return {
         **_base_headers,
