@@ -4,6 +4,7 @@ from pathlib import Path
 from models.user_data import UserData
 from models.credentials import Credentials
 import network.network_util as network_util
+from utils.retry import retry_with_backoff
 
 
 def load_credentials() -> Credentials:
@@ -38,6 +39,7 @@ def load_credentials() -> Credentials:
         raise ValueError(f"Failed to parse the credentials file: {e}") from e
 
 
+@retry_with_backoff(max_retries=3, backoff_factor=1.0)
 def login() -> UserData:
     credentials = load_credentials()
     login_payload = {

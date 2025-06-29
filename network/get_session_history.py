@@ -5,8 +5,10 @@ from models.user_data import UserData
 from datetime import datetime, timedelta, timezone
 from models.session_list_response import SessionListResponse
 from models.session_list_response import from_json
+from utils.retry import retry_with_backoff
 
 
+@retry_with_backoff(max_retries=3, backoff_factor=1.0)
 def get_sessions_history(user_data: UserData, days_back: int = None, start_date: str = None, end_date: str = None) -> SessionListResponse:
     if days_back is not None:
         logging.info("Retrieving sessions history for user: %s, days back: %d", user_data.username, days_back)

@@ -4,8 +4,10 @@ from network import network_util
 from models.user_data import UserData
 from models.session_response import SessionResponse
 from models.session_response import from_json
+from utils.retry import retry_with_backoff
 
 
+@retry_with_backoff(max_retries=3, backoff_factor=1.0)
 def get_session(user_data: UserData, session_pk: int) -> SessionResponse:
     url = "https://train.mantisx.com/get-session"
     headers_with_csrf = network_util.prepare_csrf_headers()
