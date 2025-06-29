@@ -54,25 +54,29 @@ python main.py --start-date 25/06/2025 --end-date 28/06/2025
 The project includes a comprehensive test suite using pytest. See [tests/README.md](tests/README.md) for detailed testing documentation.
 
 ### Quick Test Commands
-
 ```bash
 # Run all tests
-python -m pytest tests/ -v
+python3 -m pytest tests/ -v
 
 # Run with coverage
-python -m pytest tests/ --cov=. --cov-report=term-missing -v
+python3 -m pytest tests/ --cov=. --cov-report=term-missing -v
 
-# Use the test runner script
-python run_tests.py --type all --verbose
+# Run specific test file
+python3 -m pytest tests/test_main.py -v
 ```
 
 ### VS Code Integration
 
-The project includes VS Code configurations for:
+The project includes VS Code configurations for debugging tests:
 
-- Running tests via tasks (Ctrl+Shift+P → "Tasks: Run Task")
-- Debugging tests via launch configurations
-- Code coverage reporting
+1. Open VS Code
+2. Go to Run and Debug (Ctrl+Shift+D)
+3. Select one of the test configurations:
+   - "Debug Tests" - Run all tests with debugger
+   - "Debug Current Test File" - Debug the currently open test file
+   - "Debug Tests with Coverage" - Run all tests with coverage report
+
+You can also run tests from the Testing sidebar in VS Code.
 
 ## Development
 
