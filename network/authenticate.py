@@ -49,8 +49,6 @@ def login() -> UserData:
 
     if response.status_code == 200 and response.json().get("success"):
         logging.info("Login successful!")
-        logging.debug("Login response: %s", response.text)
-        logging.debug("Cookies after login: %s", network_util.get_session().cookies.get_dict())
 
         raw_data = response.json()
         return UserData(

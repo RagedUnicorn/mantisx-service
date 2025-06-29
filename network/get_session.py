@@ -22,11 +22,9 @@ def get_session(user_data: UserData, session_pk: int) -> SessionResponse:
     if response.status_code == 200:
         logging.info("Session details for pk %s retrieved successfully", session_pk)
         try:
-            logging.debug("Session data (raw): %s", response.text)
             return from_json(response.text)
-
-        except Exception:
-            logging.debug("Session (raw): %s", response.text)
+        except Exception as e:
+            logging.error("Failed to parse session response: %s", e)
+            raise
     else:
-        logging.error("Failed with status %s", response.status_code)
-        logging.debug("Response body: %s", response.text)
+        logging.error("Failed to retrieve session %s with status %s", session_pk, response.status_code)

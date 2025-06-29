@@ -62,5 +62,4 @@ def get_sessions_history(user_data: UserData, days_back: int = None, start_date:
         return from_json(response.text)
     else:
         logging.error("Failed to retrieve sessions history with status code: %s", response.status_code)
-
-    logging.debug("Response content: %s", response.text)
+        raise RuntimeError(f"Failed to retrieve sessions history: HTTP {response.status_code}")
