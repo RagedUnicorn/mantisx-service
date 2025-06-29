@@ -44,7 +44,7 @@ def login() -> UserData:
         "password": credentials.password
     }
     login_url = "https://train.mantisx.com/verify"
-    response = network_util.get_session().post(login_url, headers=network_util.get_base_headers(), json=login_payload)
+    response = network_util.get_session().post(login_url, headers=network_util.get_base_headers(), json=login_payload, timeout=30)
 
     if response.status_code == 200 and response.json().get("success"):
         logging.info("Login successful!")

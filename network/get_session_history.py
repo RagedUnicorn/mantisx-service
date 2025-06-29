@@ -55,7 +55,7 @@ def get_sessions_history(user_data: UserData, days_back: int = None, start_date:
         "highlights": False
     }
 
-    response = network_util.get_session().post(url, headers=headers_with_csrf, json=payload)
+    response = network_util.get_session().post(url, headers=headers_with_csrf, json=payload, timeout=30)
 
     if response.status_code == 200:
         logging.info("Sessions history retrieved successfully!")

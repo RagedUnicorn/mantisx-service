@@ -17,7 +17,7 @@ def get_session(user_data: UserData, session_pk: int) -> SessionResponse:
     }
 
     logging.debug("Fetching session.py %s", session_pk)
-    response = network_util.get_session().post(url, headers=headers_with_csrf, json=payload)
+    response = network_util.get_session().post(url, headers=headers_with_csrf, json=payload, timeout=30)
 
     if response.status_code == 200:
         logging.info("Session details for pk %s retrieved successfully", session_pk)
