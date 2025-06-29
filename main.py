@@ -121,8 +121,7 @@ def main():
     logging.debug("Filtered session PKs: %s", filtered_pks)
 
     output_dir = Path(args.output_dir)
-    if not output_dir.exists():
-        output_dir.mkdir()
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     for pk in filtered_pks:
         try:
