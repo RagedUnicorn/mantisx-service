@@ -106,3 +106,52 @@ class TestMain:
                 parse_arguments()
         finally:
             sys.argv = original_argv
+
+    def test_parse_arguments_invalid_date_range(self):
+        """Test parsing arguments with start date after end date"""
+        import sys
+        original_argv = sys.argv
+        try:
+            # Start date is after end date
+            sys.argv = ['main.py', '--start-date', '28/06/2025', '--end-date', '25/06/2025']
+            with pytest.raises(SystemExit):
+                parse_arguments()
+        finally:
+            sys.argv = original_argv
+
+    def test_parse_arguments_valid_date_range(self):
+        """Test parsing arguments with valid date range"""
+        import sys
+        original_argv = sys.argv
+        try:
+            # Valid: start date before end date
+            sys.argv = ['main.py', '--start-date', '25/06/2025', '--end-date', '28/06/2025']
+            args = parse_arguments()
+            assert args.start_date == '25/06/2025'
+            assert args.end_date == '28/06/2025'
+        finally:
+            sys.argv = original_argv
+
+    def test_parse_arguments_same_date(self):
+        """Test parsing arguments with same start and end date"""
+        import sys
+        original_argv = sys.argv
+        try:
+            # Same date should be valid (single day range)
+            sys.argv = ['main.py', '--start-date', '25/06/2025', '--end-date', '25/06/2025']
+            args = parse_arguments()
+            assert args.start_date == '25/06/2025'
+            assert args.end_date == '25/06/2025'
+        finally:
+            sys.argv = original_argv
+
+    def test_parse_arguments_end_date_without_start(self):
+        """Test that end date cannot be used without start date"""
+        import sys
+        original_argv = sys.argv
+        try:
+            sys.argv = ['main.py', '--end-date', '28/06/2025']
+            with pytest.raises(SystemExit):
+                parse_arguments()
+        finally:
+            sys.argv = original_argv

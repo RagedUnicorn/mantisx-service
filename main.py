@@ -88,10 +88,18 @@ def parse_arguments() -> argparse.Namespace:
             # Validate date formats
             from datetime import datetime
             try:
+                start_dt = None
+                end_dt = None
+                
                 if args.start_date:
-                    datetime.strptime(args.start_date, '%d/%m/%Y')
+                    start_dt = datetime.strptime(args.start_date, '%d/%m/%Y')
                 if args.end_date:
-                    datetime.strptime(args.end_date, '%d/%m/%Y')
+                    end_dt = datetime.strptime(args.end_date, '%d/%m/%Y')
+                    
+                # Validate date range logic
+                if start_dt and end_dt and start_dt > end_dt:
+                    parser.error(f"Start date ({args.start_date}) cannot be after end date ({args.end_date})")
+                    
             except ValueError as e:
                 parser.error(f"Invalid date format. Use DD/MM/YYYY format: {e}")
 
