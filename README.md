@@ -39,7 +39,11 @@ python main.py --days-back 7 --output-dir sessions
 ### Date Range Filtering
 
 ```bash
+# Using slash format
 python main.py --start-date 25/06/2025 --end-date 28/06/2025
+
+# Using dot format
+python main.py --start-date 25.06.2025 --end-date 28.06.2025
 ```
 
 ### Arguments
