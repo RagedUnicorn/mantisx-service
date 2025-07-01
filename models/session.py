@@ -50,6 +50,9 @@ def parse_session(data):
     
     def get(key, default=None):
         return work_data.get(key, default) if work_data.get(key) is not None else default
+    
+    # Get session PK for error messages
+    session_pk = get("pk", "unknown")
 
     # Parse date with validation
     try:
@@ -60,7 +63,7 @@ def parse_session(data):
         else:
             raise ValueError(f"Date must be a string, got {type(date_str)}")
     except Exception as e:
-        raise ValueError(f"Invalid date format: {e}")
+        raise ValueError(f"Invalid date format for session {session_pk}: {e}")
 
     # Parse nested objects with error handling
     try:
@@ -71,7 +74,7 @@ def parse_session(data):
             "offsetPitch": 0.0
         }))
     except Exception as e:
-        raise ValueError(f"Failed to parse session extras: {e}")
+        raise ValueError(f"Failed to parse session extras for session {session_pk}: {e}")
 
     try:
         firearm = parse_firearm(get("firearm", {
@@ -80,7 +83,7 @@ def parse_session(data):
             "caliber": ""
         }))
     except Exception as e:
-        raise ValueError(f"Failed to parse firearm: {e}")
+        raise ValueError(f"Failed to parse firearm for session {session_pk}: {e}")
 
     # Parse shots array
     shots = []
@@ -88,7 +91,7 @@ def parse_session(data):
         try:
             shots.append(parse_shot(shot_data))
         except Exception as e:
-            raise ValueError(f"Failed to parse shot at index {i}: {e}")
+            raise ValueError(f"Failed to parse shot at index {i} for session {session_pk}: {e}")
 
     comments = get("comments", [])
     if not isinstance(comments, list):

@@ -26,7 +26,10 @@ def get_session(user_data: UserData, session_pk: int) -> SessionResponse:
         try:
             return from_json(response.text)
         except Exception as e:
-            logging.error("Failed to parse session response: %s", e)
-            raise
+            error_msg = f"Failed to parse session response for pk {session_pk}: {e}"
+            logging.error(error_msg)
+            raise ValueError(error_msg) from e
     else:
-        logging.error("Failed to retrieve session %s with status %s", session_pk, response.status_code)
+        error_msg = f"Failed to retrieve session {session_pk}: HTTP {response.status_code}"
+        logging.error(error_msg)
+        raise RuntimeError(error_msg)
