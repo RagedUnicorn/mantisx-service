@@ -49,8 +49,8 @@ python main.py --start-date 25.06.2025 --end-date 28.06.2025
 ### Arguments
 
 - `--days-back` - Number of days to look back for sessions (default: 1)
-- `--start-date` - Start date (format: DD/MM/YYYY)
-- `--end-date` - End date (format: DD/MM/YYYY)
+- `--start-date` - Start date (format: DD/MM/YYYY or DD.MM.YYYY)
+- `--end-date` - End date (format: DD/MM/YYYY or DD.MM.YYYY)
 - `--output-dir` - Output directory for session files (default: output_data)
 
 ## Testing
