@@ -1,6 +1,9 @@
 # mantisx-service
 
-![](docs/mantisx-service.png)
+![](docs/mantisx_service.png)
+
+[![Run Tests](https://github.com/RagedUnicorn/mantisx-service/actions/workflows/test.yml/badge.svg)](https://github.com/RagedUnicorn/mantisx-service/actions/workflows/test.yml)
+[![Python Version](docs/python_version_badge.svg)](https://www.python.org/)
 
 A Python service for retrieving and processing MantisX training session data.
 
@@ -63,6 +66,7 @@ python main.py --start-date 25.06.2025 --end-date 28.06.2025
 The project includes a comprehensive test suite using pytest. See [tests/README.md](tests/README.md) for detailed testing documentation.
 
 ### Quick Test Commands
+
 ```bash
 # Run all tests
 python3 -m pytest tests/ -v
