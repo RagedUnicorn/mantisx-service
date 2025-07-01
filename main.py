@@ -63,6 +63,17 @@ def get_session_data(user_data, session_pk) -> SessionResponse:
     return get_session(user_data, session_pk)
 
 
+def parse_date(date_str):
+    """Parse date string in DD/MM/YYYY or DD.MM.YYYY format."""
+
+    if '/' in date_str:
+        return datetime.strptime(date_str, '%d/%m/%Y')
+    elif '.' in date_str:
+        return datetime.strptime(date_str, '%d.%m.%Y')
+    else:
+        raise ValueError(f"Invalid date format: {date_str}. Use DD/MM/YYYY or DD.MM.YYYY")
+
+
 def parse_arguments() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='MantisX Service')
@@ -72,10 +83,10 @@ def parse_arguments() -> argparse.Namespace:
                         help='Number of days to look back for sessions (default: 1)')
     parser.add_argument('--start-date',
                         type=str,
-                        help='Start date for session retrieval (format: DD/MM/YYYY, e.g., 25/06/2025)')
+                        help='Start date for session retrieval (format: DD/MM/YYYY or DD.MM.YYYY, e.g., 25/06/2025 or 25.06.2025)')
     parser.add_argument('--end-date',
                         type=str,
-                        help='End date for session retrieval (format: DD/MM/YYYY, e.g., 28/06/2025). If only start-date is provided, end-date defaults to today')
+                        help='End date for session retrieval (format: DD/MM/YYYY or DD.MM.YYYY, e.g., 28/06/2025 or 28.06.2025). If only start-date is provided, end-date defaults to today')
     parser.add_argument('--output-dir',
                         type=str,
                         default='output_data',
@@ -96,25 +107,28 @@ def parse_arguments() -> argparse.Namespace:
             try:
                 start_dt = None
                 end_dt = None
-                
+
                 if args.start_date:
-                    start_dt = datetime.strptime(args.start_date, '%d/%m/%Y')
+                    start_dt = parse_date(args.start_date)
+                    args.start_date = start_dt.strftime('%d/%m/%Y')
+
                 if args.end_date:
-                    end_dt = datetime.strptime(args.end_date, '%d/%m/%Y')
-                    
+                    end_dt = parse_date(args.end_date)
+                    args.end_date = end_dt.strftime('%d/%m/%Y')
+
                 # Validate date range logic
                 if start_dt and end_dt and start_dt > end_dt:
                     parser.error(f"Start date ({args.start_date}) cannot be after end date ({args.end_date})")
-                    
+
             except ValueError as e:
-                parser.error(f"Invalid date format. Use DD/MM/YYYY format: {e}")
+                parser.error(f"Invalid date format. Use DD/MM/YYYY or DD.MM.YYYY format: {e}")
 
     return args
 
 
 def main():
     args = parse_arguments()
-    
+
     try:
         user_data = login()
     except (FileNotFoundError, ValueError, RuntimeError) as e:
@@ -144,7 +158,7 @@ def main():
 
     successful_saves = 0
     failed_saves = 0
-    
+
     for i, pk in enumerate(filtered_pks, 1):
         try:
             logging.info("Processing session %d/%d (pk: %s)", i, len(filtered_pks), pk)
@@ -155,9 +169,9 @@ def main():
         except Exception as e:
             logging.error("Failed to fetch or save session data for pk %s: %s", pk, e)
             failed_saves += 1
-    
+
     # Summary
-    logging.info("Processing complete: %d successful, %d failed out of %d total sessions", 
+    logging.info("Processing complete: %d successful, %d failed out of %d total sessions",
                  successful_saves, failed_saves, len(filtered_pks))
 
 
