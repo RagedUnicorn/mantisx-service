@@ -13,6 +13,11 @@ A Python service for retrieving and processing MantisX training session data.
 - Configurable logging levels
 - Comprehensive test suite
 
+## Requirements
+
+- Python 3.9 or higher
+- pip (Python package installer)
+
 ## Installation
 
 1. Clone the repository
