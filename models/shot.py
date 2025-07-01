@@ -30,7 +30,7 @@ class Shot:
     holster_pull_time: float
     horizontal_time: float
     holster_target_time: float
-    horizontal_to_shot_time: float
+    horizontal_to_shot_time: Optional[float] = None
     step_number: Optional[int] = None
 
 
@@ -38,14 +38,13 @@ def parse_shot(data):
     if not isinstance(data, dict):
         raise ValueError("Shot data must be a dictionary")
     
-    # All fields except step_number are required
+    # All fields except step_number and horizontal_to_shot_time are required
     required_fields = [
         'pk', 'score', 'angle', 'extras', 'session_pk', 'problem', 
         'pitch', 'yaw', 'bullseye', 'trigger_hold', 'trigger_pull', 
         'deleted', 'split', 'hold_index', 'pull_index', 'shot_index',
         'absolute_pitch', 'absolute_roll', 'sample_rate', 'holster_total_time',
-        'grip_time', 'holster_pull_time', 'horizontal_time', 'holster_target_time',
-        'horizontal_to_shot_time'
+        'grip_time', 'holster_pull_time', 'horizontal_time', 'holster_target_time'
     ]
     
     missing_fields = [field for field in required_fields if field not in data]
@@ -59,8 +58,10 @@ def parse_shot(data):
     kwargs = {field: data[field] for field in required_fields if field != 'extras'}
     kwargs['extras'] = extras
     
-    # Add optional field if present
+    # Add optional fields if present
     if 'step_number' in data:
         kwargs['step_number'] = data['step_number']
+    if 'horizontal_to_shot_time' in data:
+        kwargs['horizontal_to_shot_time'] = data['horizontal_to_shot_time']
     
     return Shot(**kwargs)
