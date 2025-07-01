@@ -40,11 +40,17 @@ def save_session_to_file(session_data: SessionResponse, output_dir: Path) -> Pat
     Saves the session data to a JSON file in the specified output directory.
     The filename includes the session date and pk.
     """
-    session_date = datetime.fromisoformat(session_data.session.date.isoformat()).strftime("%Y_%m_%d")
-    filename = output_dir / f"{session_date}_session_{session_data.session.pk}.json"
+    try:
+        session_date = datetime.fromisoformat(session_data.session.date.isoformat()).strftime("%Y_%m_%d")
+        filename = output_dir / f"{session_date}_session_{session_data.session.pk}.json"
+    except Exception as e:
+        raise ValueError(f"Failed to generate filename for session {session_data.session.pk}: {e}") from e
 
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(session_data, f, indent=2, cls=EnhancedJSONEncoder)
+    try:
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(session_data, f, indent=2, cls=EnhancedJSONEncoder)
+    except Exception as e:
+        raise IOError(f"Failed to write session {session_data.session.pk} to {filename}: {e}") from e
 
     return filename
 
@@ -126,18 +132,33 @@ def main():
 
     # gather all session pks for a specific drill type
     filtered_pks = filter_sessions_by_drill(session_history.sessions, DrillType.HOLSTER_DRAW_ANALYSIS)
+    logging.info("Found %d sessions matching drill type: %s", len(filtered_pks), DrillType.HOLSTER_DRAW_ANALYSIS.value)
     logging.debug("Filtered session PKs: %s", filtered_pks)
+
+    if not filtered_pks:
+        logging.warning("No sessions found matching the specified drill type")
+        return
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    for pk in filtered_pks:
+    successful_saves = 0
+    failed_saves = 0
+    
+    for i, pk in enumerate(filtered_pks, 1):
         try:
+            logging.info("Processing session %d/%d (pk: %s)", i, len(filtered_pks), pk)
             session_data = get_session_data(user_data, pk)
             saved_path = save_session_to_file(session_data, output_dir)
-            logging.debug("Saved session %s to %s", pk, saved_path)
+            logging.info("Saved session %s to %s", pk, saved_path)
+            successful_saves += 1
         except Exception as e:
             logging.error("Failed to fetch or save session data for pk %s: %s", pk, e)
+            failed_saves += 1
+    
+    # Summary
+    logging.info("Processing complete: %d successful, %d failed out of %d total sessions", 
+                 successful_saves, failed_saves, len(filtered_pks))
 
 
 if __name__ == "__main__":
