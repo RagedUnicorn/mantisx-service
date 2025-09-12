@@ -9,6 +9,24 @@ from utils.retry import retry_with_backoff
 
 def load_credentials() -> Credentials:
     """
+    Loads credentials from environment variables or a properties file.
+    Environment variables take precedence over the properties file.
+    """
+    import os
+
+    username = os.getenv('MANTISX_USERNAME')
+    password = os.getenv('MANTISX_PASSWORD')
+
+    if username and password:
+        logging.info("Loaded credentials from environment variables.")
+        return Credentials(username=username, password=password)
+
+    logging.info("Environment vars not set. Attempting to load credentials from file.")
+    return load_credential_file()
+
+
+def load_credential_file() -> Credentials:
+    """
     Loads credentials from a properties file in the user's home directory.
     The file can be named mantisx, mantisx.txt, mantis, or mantis.txt.
     """

@@ -108,6 +108,8 @@ You can also run tests from the Testing sidebar in VS Code.
 ### Environment Variables
 
 - `MANTISX_SERVICE_LOG_LEVEL` - Set logging level (10=DEBUG, 20=INFO, 30=WARNING, 40=ERROR)
+- `MANTISX_USERNAME` - MantisX account username
+- `MANTISX_PASSWORD` - MantisX account password
 
 ## License
 
