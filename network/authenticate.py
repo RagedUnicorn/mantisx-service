@@ -4,10 +4,32 @@ from pathlib import Path
 from models.user_data import UserData
 from models.credentials import Credentials
 import network.network_util as network_util
+import os
+
 from utils.retry import retry_with_backoff
 
 
 def load_credentials() -> Credentials:
+    """
+    Loads credentials from environment variables or a properties file.
+    Environment variables take precedence over the properties file.
+    """
+
+    username = os.getenv('MANTISX_USERNAME')
+    password = os.getenv('MANTISX_PASSWORD')
+
+    if username or password:
+        if not (username and password):
+            logging.warning("Only one of MANTISX_USERNAME/MANTISX_PASSWORD is set. Both are required. Falling back to file.")
+        else:
+            logging.info("Loaded credentials from environment variables.")
+            return Credentials(username=username, password=password)
+
+    logging.info("Environment vars not set. Attempting to load credentials from file.")
+    return load_credential_file()
+
+
+def load_credential_file() -> Credentials:
     """
     Loads credentials from a properties file in the user's home directory.
     The file can be named mantisx, mantisx.txt, mantis, or mantis.txt.
