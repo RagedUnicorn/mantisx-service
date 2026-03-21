@@ -18,9 +18,12 @@ def load_credentials() -> Credentials:
     username = os.getenv('MANTISX_USERNAME')
     password = os.getenv('MANTISX_PASSWORD')
 
-    if username and password:
-        logging.info("Loaded credentials from environment variables.")
-        return Credentials(username=username, password=password)
+    if username or password:
+        if not (username and password):
+            logging.warning("Only one of MANTISX_USERNAME/MANTISX_PASSWORD is set. Both are required. Falling back to file.")
+        else:
+            logging.info("Loaded credentials from environment variables.")
+            return Credentials(username=username, password=password)
 
     logging.info("Environment vars not set. Attempting to load credentials from file.")
     return load_credential_file()
