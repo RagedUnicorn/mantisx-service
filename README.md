@@ -105,6 +105,23 @@ You can also run tests from the Testing sidebar in VS Code.
 └── .vscode/             # VS Code configuration
 ```
 
+### Authentication
+
+Credentials can be provided in two ways. Environment variables take precedence over the credentials file.
+
+**Option 1: Environment Variables**
+
+Set `MANTISX_USERNAME` and `MANTISX_PASSWORD` with your MantisX account credentials. Both must be set — if only one is provided, the service will log a warning and fall back to the credentials file.
+
+**Option 2: Credentials File**
+
+Create a file in your home directory with one of the following names: `mantisx`, `mantisx.txt`, `mantis`, or `mantis.txt`. The file should contain your credentials in key=value format:
+
+```
+username=your_username
+password=your_password
+```
+
 ### Environment Variables
 
 - `MANTISX_SERVICE_LOG_LEVEL` - Set logging level (10=DEBUG, 20=INFO, 30=WARNING, 40=ERROR)
