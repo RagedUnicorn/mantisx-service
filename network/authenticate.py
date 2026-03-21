@@ -4,6 +4,8 @@ from pathlib import Path
 from models.user_data import UserData
 from models.credentials import Credentials
 import network.network_util as network_util
+import os
+
 from utils.retry import retry_with_backoff
 
 
@@ -12,7 +14,6 @@ def load_credentials() -> Credentials:
     Loads credentials from environment variables or a properties file.
     Environment variables take precedence over the properties file.
     """
-    import os
 
     username = os.getenv('MANTISX_USERNAME')
     password = os.getenv('MANTISX_PASSWORD')
