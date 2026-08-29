@@ -1,6 +1,6 @@
 # mantisx-service
 
-![](docs/mantisx_service.png)
+![](docs/mantisx_service_banner.svg)
 
 [![Run Tests](https://github.com/RagedUnicorn/mantisx-service/actions/workflows/test.yml/badge.svg)](https://github.com/RagedUnicorn/mantisx-service/actions/workflows/test.yml)
 [![Python Version](docs/python_version_badge.svg)](https://www.python.org/)
